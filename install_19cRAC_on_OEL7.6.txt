@@ -217,7 +217,7 @@ node2起動
 
 # shutdown -h now
 
-// 3node RACの場合のみ
+// 3node RACを構成する場合のみ
 ≪クローン node1 -> node3≫
 node3起動
 
@@ -231,9 +231,8 @@ node3起動
 
 # shutdown -h now
 
-// ホストOS側手順
 ≪共有ディスク作成≫
-mkdir c:\vbox\shared-disk-rac-193;cd c:\vbox\shared-disk-rac-193
+mkdir /vbox_ssd/shared-disk-rac-193;cd /vbox_ssd/shared-disk-rac-193
 vboxmanage createmedium disk --filename rac-193-asm-disk1.vdi --size 1024 --format VDI --variant Fixed # GRID
 vboxmanage createmedium disk --filename rac-193-asm-disk2.vdi --size 1024 --format VDI --variant Fixed # GRID
 vboxmanage createmedium disk --filename rac-193-asm-disk3.vdi --size 1024 --format VDI --variant Fixed # GRID
@@ -339,16 +338,15 @@ node1/unix:10  MIT-MAGIC-COOKIE-1  bbcc7cc36b9d14898396d4c359efa07d
 DISPLAY=localhost:10.0
 # xhost +
 # su - grid
-$ xauth add unix:10  MIT-MAGIC-COOKIE-1  bbcc7cc36b9d14898396d4c35
-9efa07d
+$ xauth add unix:10  MIT-MAGIC-COOKIE-1  bbcc7cc36b9d14898396d4c359efa07d
 $ export DISPLAY=localhost:10.0
 $ $GI_HOME/gridSetup.sh 
 
 個別パッチを同時に適用する場合
-$ $GI_HOME/gridSetup.sh -applyOneOffs <Patch Dir>
+$ $GI_HOME/gridSetup.sh -applyOneOffs 
 
 RUを同時に適用する場合
-$ $GI_HOME/gridSetup.sh -applyPSU <Patch Dir>
+$ $GI_HOME/gridSetup.sh -applyPSU 
 
 # echo -e "export ORACLE_BASE=/u01/app/grid \n\
 export ORACLE_HOME=$GI_HOME \n\
@@ -359,8 +357,8 @@ export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH \n"|tee -a /home/grid/
 ≪DBメディア解凍≫
 DB_HOME=/u01/base/app/database
 # mkdir -p $DB_HOME
-# chown -R oracle:oinstall /u01/base
-# chmod -R 775 /u01/app/oracle
+# chown -R oracle:oinstall /u01/app/oracle
+# chmod -R 775 /u01/base
 # su -l oracle -c "unzip -q /opt/media/LINUX.X64_193000_db_home.zip -d $DB_HOME"
 
 ≪DBインストール≫
@@ -375,12 +373,12 @@ $ export DISPLAY=localhost:10.0
 $ $DB_HOME/runInstaller
 
 個別パッチを同時に適用する場合
-$ $DB_HOME/runInstaller -applyOneOffs <Patch Dir>
+$ $DB_HOME/runInstaller -applyOneOffs 
 
 RUを同時に適用する場合
-$ $DB_HOME/runInstaller -applyRU <Patch Dir>
+$ $DB_HOME/runInstaller -applyPSU 
 
 
-# echo -e "export ORACLE_BASE=/u01/app/oracle \n\
+# echo -e "export ORACLE_BASE=/u01/base \n\
 export ORACLE_HOME=$DB_HOME \n\
 export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH \n"|tee -a /home/oracle/.bash_profile
