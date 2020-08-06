@@ -232,7 +232,8 @@ node3起動
 # shutdown -h now
 
 ≪共有ディスク作成≫
-mkdir /vbox_ssd/shared-disk-rac-193;cd /vbox_ssd/shared-disk-rac-193
+mkdir c:\vbox\shared-disk-rac-193
+cd c:\vbox\shared-disk-rac-193
 vboxmanage createmedium disk --filename rac-193-asm-disk1.vdi --size 1024 --format VDI --variant Fixed # GRID
 vboxmanage createmedium disk --filename rac-193-asm-disk2.vdi --size 1024 --format VDI --variant Fixed # GRID
 vboxmanage createmedium disk --filename rac-193-asm-disk3.vdi --size 1024 --format VDI --variant Fixed # GRID
@@ -249,28 +250,29 @@ vboxmanage modifymedium disk rac-193-asm-disk6.vdi --type shareable
 
 vboxmanage storageattach node1-rac-193 --storagectl "SATA" --port 1 --device 0 --type hdd --medium rac-193-asm-disk1.vdi
 vboxmanage storageattach node2-rac-193 --storagectl "SATA" --port 1 --device 0 --type hdd --medium rac-193-asm-disk1.vdi
-vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 1 --device 0 --type hdd --medium rac-193-asm-disk1.vdi
+# vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 1 --device 0 --type hdd --medium rac-193-asm-disk1.vdi
 
 vboxmanage storageattach node1-rac-193 --storagectl "SATA" --port 2 --device 0 --type hdd --medium rac-193-asm-disk2.vdi
 vboxmanage storageattach node2-rac-193 --storagectl "SATA" --port 2 --device 0 --type hdd --medium rac-193-asm-disk2.vdi
-vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 2 --device 0 --type hdd --medium rac-193-asm-disk2.vdi
+# vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 2 --device 0 --type hdd --medium rac-193-asm-disk2.vdi
 
 vboxmanage storageattach node1-rac-193 --storagectl "SATA" --port 3 --device 0 --type hdd --medium rac-193-asm-disk3.vdi
 vboxmanage storageattach node2-rac-193 --storagectl "SATA" --port 3 --device 0 --type hdd --medium rac-193-asm-disk3.vdi
-vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 3 --device 0 --type hdd --medium rac-193-asm-disk3.vdi
+# vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 3 --device 0 --type hdd --medium rac-193-asm-disk3.vdi
 
 vboxmanage storageattach node1-rac-193 --storagectl "SATA" --port 4 --device 0 --type hdd --medium rac-193-asm-disk4.vdi
 vboxmanage storageattach node2-rac-193 --storagectl "SATA" --port 4 --device 0 --type hdd --medium rac-193-asm-disk4.vdi
-vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 4 --device 0 --type hdd --medium rac-193-asm-disk4.vdi
+# vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 4 --device 0 --type hdd --medium rac-193-asm-disk4.vdi
 
 vboxmanage storageattach node1-rac-193 --storagectl "SATA" --port 5 --device 0 --type hdd --medium rac-193-asm-disk5.vdi
 vboxmanage storageattach node2-rac-193 --storagectl "SATA" --port 5 --device 0 --type hdd --medium rac-193-asm-disk5.vdi
-vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 5 --device 0 --type hdd --medium rac-193-asm-disk5.vdi
+# vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 5 --device 0 --type hdd --medium rac-193-asm-disk5.vdi
 
 vboxmanage storageattach node1-rac-193 --storagectl "SATA" --port 6 --device 0 --type hdd --medium rac-193-asm-disk6.vdi
 vboxmanage storageattach node2-rac-193 --storagectl "SATA" --port 6 --device 0 --type hdd --medium rac-193-asm-disk6.vdi
-vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 6 --device 0 --type hdd --medium rac-193-asm-disk6.vdi
+# vboxmanage storageattach node3-rac-193 --storagectl "SATA" --port 6 --device 0 --type hdd --medium rac-193-asm-disk6.vdi
 
+// ゲストOS起動
 ≪ストレージディスク設定≫
 ※ノード1のみ
 parted /dev/sdb～/dev/sdg
