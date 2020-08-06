@@ -211,27 +211,29 @@ node2起動
 # hostnamectl set-hostname node2
 
 ＜IPアドレス変更＞
-# nmcli c modify enp0s3 ipv4.addresses 192.168.56.52/24;nmcli c down enp0s3;nmcli c up enp0s3
-# nmcli c modify enp0s8 ipv4.addresses 192.168.100.52/24;nmcli c down enp0s8;nmcli c up enp0s8
-# nmcli c modify enp0s9 ipv4.addresses 192.168.200.52/24;nmcli c down enp0s9;nmcli c up enp0s9
+# nmcli c modify enp0s3 ipv4.addresses 192.168.56.102/24;nmcli c down enp0s3;nmcli c up enp0s3
+# nmcli c modify enp0s8 ipv4.addresses 192.168.100.102/24;nmcli c down enp0s8;nmcli c up enp0s8
+# nmcli c modify enp0s9 ipv4.addresses 192.168.200.102/24;nmcli c down enp0s9;nmcli c up enp0s9
 
 # shutdown -h now
 
+// 3node RACの場合のみ
 ≪クローン node1 -> node3≫
-node2起動
+node3起動
 
 ≪ホスト名変更≫
 # hostnamectl set-hostname node3
 
 ＜IPアドレス変更＞
-# nmcli c modify enp0s3 ipv4.addresses 192.168.56.53/24;nmcli c down enp0s3;nmcli c up enp0s3
-# nmcli c modify enp0s8 ipv4.addresses 192.168.100.53/24;nmcli c down enp0s8;nmcli c up enp0s8
-# nmcli c modify enp0s9 ipv4.addresses 192.168.200.53/24;nmcli c down enp0s9;nmcli c up enp0s9
+# nmcli c modify enp0s3 ipv4.addresses 192.168.56.103/24;nmcli c down enp0s3;nmcli c up enp0s3
+# nmcli c modify enp0s8 ipv4.addresses 192.168.100.103/24;nmcli c down enp0s8;nmcli c up enp0s8
+# nmcli c modify enp0s9 ipv4.addresses 192.168.200.103/24;nmcli c down enp0s9;nmcli c up enp0s9
 
 # shutdown -h now
 
+// ホストOS側手順
 ≪共有ディスク作成≫
-mkdir /vbox_ssd/shared-disk-rac-193;cd /vbox_ssd/shared-disk-rac-193
+mkdir c:\vbox\shared-disk-rac-193;cd c:\vbox\shared-disk-rac-193
 vboxmanage createmedium disk --filename rac-193-asm-disk1.vdi --size 1024 --format VDI --variant Fixed # GRID
 vboxmanage createmedium disk --filename rac-193-asm-disk2.vdi --size 1024 --format VDI --variant Fixed # GRID
 vboxmanage createmedium disk --filename rac-193-asm-disk3.vdi --size 1024 --format VDI --variant Fixed # GRID
@@ -342,11 +344,11 @@ $ xauth add unix:10  MIT-MAGIC-COOKIE-1  bbcc7cc36b9d14898396d4c35
 $ export DISPLAY=localhost:10.0
 $ $GI_HOME/gridSetup.sh 
 
-個別パッチを同時に適用
-$ $GI_HOME/gridSetup.sh -applyOneOffs 
+個別パッチを同時に適用する場合
+$ $GI_HOME/gridSetup.sh -applyOneOffs <Patch Dir>
 
-RUを同時に適用
-$ $GI_HOME/gridSetup.sh -applyPSU 
+RUを同時に適用する場合
+$ $GI_HOME/gridSetup.sh -applyPSU <Patch Dir>
 
 # echo -e "export ORACLE_BASE=/u01/app/grid \n\
 export ORACLE_HOME=$GI_HOME \n\
@@ -355,14 +357,28 @@ export PATH=\$ORACLE_HOME/bin:\$ORACLE_HOME/OPatch:\$PATH \n"|tee -a /home/grid/
 # echo -e "export PATH=$GI_HOME/bin:$GI_HOME/OPatch:\$PATH \n"|tee -a /root/.bash_profile
 
 ≪DBメディア解凍≫
-DB_HOME=/u01/app/oracle/product/18.0.0/dbhome_1
+DB_HOME=/u01/base/app/database
 # mkdir -p $DB_HOME
-# chown -R oracle:oinstall /u01/app/oracle
+# chown -R oracle:oinstall /u01/base
 # chmod -R 775 /u01/app/oracle
-# su -l oracle -c "unzip -q /opt/media/LINUX.X64_180000_db_home.zip -d $DB_HOME"
+# su -l oracle -c "unzip -q /opt/media/LINUX.X64_193000_db_home.zip -d $DB_HOME"
 
 ≪DBインストール≫
-$DB_HOME/runInstaller
+# xauth list
+node1/unix:10  MIT-MAGIC-COOKIE-1  bbcc7cc36b9d14898396d4c359efa07d
+# env|grep DISPLAY
+DISPLAY=localhost:10.0
+# xhost +
+# su - oracle
+$ xauth add unix:10  MIT-MAGIC-COOKIE-1  bbcc7cc36b9d14898396d4c359efa07d
+$ export DISPLAY=localhost:10.0
+$ $DB_HOME/runInstaller
+
+個別パッチを同時に適用する場合
+$ $DB_HOME/runInstaller -applyOneOffs <Patch Dir>
+
+RUを同時に適用する場合
+$ $DB_HOME/runInstaller -applyRU <Patch Dir>
 
 
 # echo -e "export ORACLE_BASE=/u01/app/oracle \n\
